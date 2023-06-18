@@ -28,3 +28,8 @@
 				(return-from 20-to-99 					
 						(aref dozen (- (floor (/ number 10)) 2))))	       
 	       (return-from 20-to-99 "Enter a number between 20 and 99")))
+		   
+(defun 0-to-99 (number)
+	   (if (and (>= number 0) (<= number 9)) (return-from 0-to-99 (0-to-9 number)))
+	   (if (and (>= number 10) (<= number 19)) (return-from 0-to-99 (10-to-19 number)))
+	   (if (and (>= number 20) (<= number 99)) (return-from 0-to-99 (20-to-99 number))))		   
