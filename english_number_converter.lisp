@@ -51,8 +51,10 @@
 	
 (defun 1k-to-max (number)
 	(let ((num number)
-			(result ""))
-		(loop for i from 0 to 4 do
+			(result "")
+			(tnum 0)
+			(d 0))
+		(loop for i from 0 to 4 do			
 			(setf tnum (aref thousands-num i))
 			(setf d (floor (/ num tnum)))			
 			(if (<= tnum num) 
@@ -70,3 +72,10 @@
 					result
 					(0-to-999 num))))
 			result))
+
+
+(defun number-to-letter (number)
+	(if (< number 0) (return-from number-to-letter "Enter a positive number"))
+	(if (<= number 999) 
+		(return-from number-to-letter (0-to-999 number))
+		(return-from number-to-letter (1k-to-max number))))
