@@ -1,7 +1,8 @@
 (defconstant units #("zero" "one" "two" "three" "four" "five" "six" "seven" "eight" "nine"))
-(defconstant teens #("ten" "eleven" "twelve" "thirteen" "fourteen" "fifteen" "sixteen" "seventeen"
- "eighteen" "nineteen"))
+(defconstant teens #("ten" "eleven" "twelve" "thirteen" "fourteen" "fifteen" "sixteen" "seventeen" "eighteen" "nineteen"))
 (defconstant dozen #("twenty" "thirty" "forty" "fifty" "sixty" "seventy" "eighty" "ninety"))
+(defconstant thousands #("quadrillion" "trillion" "billion" "million" "thousand"))
+(defconstant thousands-num #(1000000000000000  1000000000000  1000000000  1000000  1000))
 
 (defmacro assert-equal (num fun)
 	   `(string-equal (format nil "~r" ,num) (,fun ,num)))
@@ -42,3 +43,30 @@
 	     (if (= c 0)
 		 (return-from 100-to-999 (concatenate 'string (0-to-99 d) " hundred"))
 		 (return-from 100-to-999 (concatenate 'string (0-to-99 d) " hundred " (0-to-99 c))))))
+		 
+(defun 0-to-999 (number)
+	(if (or (< number 0) (> number 999)) (return-from 0-to-999 "Enter a number between 0 and 999"))
+	(if (and (>= number 0) (<= number 99)) (return-from 0-to-999 (0-to-99 number)))
+	(if (and (>= number 100) (<= number 999)) (return-from 0-to-999 (100-to-999 number))))
+	
+(defun 1k-to-max (number)
+	(let ((num number)
+			(result ""))
+		(loop for i from 0 to 4 do
+			(setf tnum (aref thousands-num i))
+			(setf d (floor (/ num tnum)))			
+			(if (<= tnum num) 
+				(setf result (concatenate 'string
+					result
+					(0-to-999 d)
+					" "
+					(aref thousands i))))
+			(setf num (mod num tnum))
+			(if (and (> num 0) (> d 0))
+				(setf result (concatenate 'string
+					result " "))))
+			(if (> num 0)
+				(setf result (concatenate 'string
+					result
+					(0-to-999 num))))
+			result))
